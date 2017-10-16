@@ -1,0 +1,43 @@
+{% extends 'bumprapp/base.html' %}
+{% block title %}{{ plate_list.0 }} | Bumpr{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Known plates in <b>{{ plate_list.0.get_state_disp }}</b></h1><br><br>
+            <table>
+                <tr>
+                    <th>Plate</th>
+                    <th>State</th>
+                    <th>Rating</th>
+                    <th>Claimed</th>
+                </tr>
+                {% for plate in plate_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'plate_detail' state_string=plate.state.lower plate_string=plate.plate_text %}">
+                                <button class="btn btn-primary">{{ plate.plate_text }}</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'plate_state' state_string=plate.state.lower %}">
+                                <button class="btn btn-outline-primary">{{ plate.get_state_disp }}
+                                </button>
+                            </a>
+                        </td>
+                        <td class="">
+                            {{ plate.get_rating }}%
+                        </td>
+                        <td class="">
+                            {% if plate.claimed %}
+                                ✔️
+                            {% else %}
+                                😞
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

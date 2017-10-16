@@ -1,0 +1,36 @@
+{% extends 'bumprapp/base.html' %}
+{% load static %}
+{% block title %}Bumpr{% endblock %}
+{% block content %}
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-3">How was your drive?</h1>
+            <p>Ever wanted to leave a review for someone on the road? Ever wanted to see your own reviews? Roll into
+                Bumpr.</p>
+            {% if user.is_authenticated %}
+                <p><a class="btn btn-primary btn-lg" href="{% url 'plate_lookup' %}" role="button">Bumpr Lookup
+                    &raquo;</a></p>
+            {% else %}
+                <p><a class="btn btn-primary btn-lg" href="{% url 'user_register' %}" role="button">Sign Up &raquo;</a>&nbsp;
+                    or &nbsp;<a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Log In &raquo;</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+    <div id="splashDex">
+{#        <div class="col-4 text-center">#}
+{#            <h3>Rate and Review</h3>#}
+{#            <p>Leave ratings and reviews on the best, or <i>worst</i> drivers you know. Think you could be a NASCAR driver? See what people have to say about it!</p>#}
+{#        </div>#}
+{#        <div class="col-4 text-center">#}
+{#            <h3>Lookup and Hookup</h3>#}
+{#            <p>Found your car on Bumpr? Link it to your profile and get notified when someone leaves a rating or comment.</p>#}
+{#        </div>#}
+{#        <div class="col-4 text-center">#}
+{#            <h3>Share and Compare</h3>#}
+{#            <p>Share Bumpr ratings, comments and profiles with friends</p>#}
+{#        </div>#}
+    </div>
+
+{% endblock %}

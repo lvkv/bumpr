@@ -1,0 +1,41 @@
+{% extends 'bumprapp/base.html' %}
+{% block title %}{{ profile_user.username }} | Bumpr{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="container text-center">
+        <div class="jumbotron jumbotron-fluid">
+            <img src="{% static 'bumprapp/images/default_icon.png' %}" class="rounded-circle" height="245px"
+                 width="245"/>
+            <h1>{{ profile_user.username }}</h1>
+
+            <p>{{ profile_user.profile.bio }}</p>
+            {% if profile_user.username == user.username %}
+                <a href="{% url 'user_profile_edit' userstring=user.username %}">Edit Profile</a>
+            {% endif %}
+            {#            <p>{{ profile_user.profile.location }}</p>#}
+        </div>
+        <div>
+            {% if profile_user_plates %}
+                <h3>Plates Owned by <b>{{ profile_user.username }}</b>:</h3><br>
+                {% for plate in profile_user_plates %}
+                    <a href="{% url 'plate_detail' state_string=plate.state.lower plate_string=plate.plate_text %}">
+                        <div class="card">
+                            <div class="card-block">
+                                <blockquote class="card-blockquote">
+                                    {{ plate.plate_text }}
+                                </blockquote>
+                                <blockquote class="card-blockquote">
+                                    {{ plate.get_rating }}% · {{ plate.number_of_votes }} views
+                                </blockquote>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <h3><b>{{ profile_user.username }}</b> doesn't own any plates</h3><br>
+            {% endif %}
+        <br><br><br><br><br>
+        </div>
+    </div>
+
+{% endblock %}

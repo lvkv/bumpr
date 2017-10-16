@@ -1,0 +1,20 @@
+{% extends 'bumprapp/base.html' %}
+{% block title %}Lookup | Bumpr{% endblock %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Plate Lookup</h1><br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <button type="submit" value="Submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

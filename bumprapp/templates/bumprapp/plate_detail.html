@@ -1,0 +1,87 @@
+{% extends 'bumprapp/base.html' %}
+{% block title %}{{ spec_plate.plate_text }} | Bumpr{% endblock %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% load js %}
+    <script type="text/javascript">
+        var upvotes =
+        {{ spec_plate.upvotes | js }}
+        var downvotes = {{ spec_plate.downvotes | js }};
+
+        //Functions to increase likes and immediately calculate bar widths
+        function upvote() {
+            upvotes++;
+            calculateBar();
+        }
+        function downvote() {
+            downvotes++;
+            calculateBar();
+        }
+
+        //Calculates bar widths
+        function calculateBar() {
+            var total = upvotes + downvotes;
+            //Simple math to calculate percentages
+            var percentageUpvotes = (upvotes / total) * 100;
+            var percentageDownvotes = (downvotes / total) * 100;
+
+            //We need to apply the widths to our elements
+            document.getElementById('upvotes').style.width = percentageUpvotes.toString() + "%";
+            document.getElementById('downvotes').style.width = percentageDownvotes.toString() + "%";
+
+            //We add the numbers on the buttons, just to show how to
+            document.getElementById('upvoteButton').value = "upvote (" + upvotes.toString() + ")";
+            document.getElementById('downvoteButton').value = "downvote (" + downvotes.toString() + ")";
+
+        }
+
+        calculateBar();
+    </script>
+    <div class="container text-center">
+        <div class="jumbotron jumbotron-fluid">
+            <h1>{{ spec_plate.plate_text }}</h1>
+            <p>{{ spec_plate.get_state_disp }}</p>
+            <p>
+                {% if spec_plate.claimed %}
+                    Owned by
+                    <b><a href="{% url 'user_profile' userstring=spec_plate.driver.username %}">{{ spec_plate.driver.username }}</a></b>
+                {% else %}
+                    This plate has not been claimed
+                {% endif %}
+            </p>
+            <div id="bar">
+                <div id="upvotes"></div>
+                <div id="downvotes"></div>
+            </div>
+            <br>
+            <button id="upvoteButton" class="btn btn-outline-success" onclick="upvote();">Like</button>
+            <button id="downvoteButton" class="btn btn-outline-danger" onclick="downvote();">Dislike</button>
+        </div>
+        <h3>Comments</h3>
+        <form method="POST" class="">
+            {% csrf_token %}
+            {{ comment_form | crispy }}
+            <button type="submit" value="Submit" class="btn btn-primary">Comment</button>
+        </form>
+        {% if comment_list %}
+            <div class="text-left">
+                {% for comment in comment_list %}
+{#                    <table>#}
+{#                        <tr>#}
+{#                            <td><b>{{ comment.user }}</b></td>#}
+{#                            <td>{{ comment }}</td>#}
+{#                        </tr>#}
+{#                    </table>#}
+                    <div class="card_dead">
+                        <b><a href="{% url 'user_profile' userstring=comment.user %}">{{ comment.user }}</a></b> {{ comment }}
+                    </div>
+                {% endfor %}
+            <br><br><br>
+            </div>
+        {% else %}
+        {% endif %}
+
+
+    </div>
+
+{% endblock %}

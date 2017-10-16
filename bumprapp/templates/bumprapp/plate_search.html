@@ -1,0 +1,43 @@
+{% extends 'bumprapp/base.html' %}
+{% block title %}Search | Bumpr{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Plate Results for "<b>{{ queryoni }}</b>"</h1><br><br>
+            <table>
+                <tr>
+                    <th>Plate</th>
+                    <th>State</th>
+                    <th>Rating</th>
+                    <th class="text-center">Claimed</th>
+                </tr>
+                {% for plate in filtered_plates %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'plate_detail' state_string=plate.state.lower plate_string=plate.plate_text %}">
+                                <button class="btn btn-primary">{{ plate.plate_text }}</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'plate_state' state_string=plate.state.lower %}">
+                                <button class="btn btn-outline-primary">{{ plate.get_state_disp }}
+                                </button>
+                            </a>
+                        </td>
+                        <td class="">
+                            {{ plate.get_rating }}%
+                        </td>
+                        <td class="text-center">
+                            {% if plate.claimed %}
+                                ✔️
+                            {% else %}
+                                😞
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
